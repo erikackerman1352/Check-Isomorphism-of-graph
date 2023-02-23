@@ -1,0 +1,63 @@
+function [areIsomorphic] = checkIsomorphism(A1, A2)
+    if (issymmetric(A1) == true)
+        G1 = graph(A1);
+    else
+        G1 = graph(A1,'upper', 'omitselfloops');
+    end
+    if (issymmetric(A2) == true)
+        G2 = graph(A2);
+    else
+        G2 = graph(A2, 'upper');
+    end
+    
+% Find the degree sequence of 2 graphs
+    D1 = degree(G1);
+    sorted_d1 = sort(D1);
+    D2 = degree(G2);
+    sorted_d2 = sort(D2);
+%     if (D1 ~= D2)
+%         error('Not isomorphism');
+%     end
+
+% Find the number of vertices of 2 graphs
+    N1 = numnodes(G1);
+    N2 = numnodes(G2);
+%     if (N1 ~= N2)
+%         error('Not isomorphism');
+%     end
+
+% Find the number of edges of 2 graphs
+    E1 = numedges(G1);
+    E2 = numedges(G2);
+%     if (E1 ~= E2)
+%         error('Not isomorphism');
+%     end
+
+
+%Find the length of all the cycles in 2 graphs
+    Cycles1 = allcycles(G1);
+    Cycles2 = allcycles(G2);
+    cycle_length_sequence_1 =[];
+    cycle_length_sequence_2 =[];
+    number_of_cycles1 = numel(Cycles1);
+    number_of_cycles2 = numel(Cycles2);    
+     
+    for i = 1:length(Cycles1)
+        len = length(Cycles1{i});
+        cycle_length_sequence_1 =[cycle_length_sequence_1, len];
+    end
+    
+    for i = 1:length(Cycles2)
+        len = length(Cycles2{i});
+        cycle_length_sequence_2 =[cycle_length_sequence_2, len];
+    end
+    
+    sorted_1 = sort(cycle_length_sequence_1);
+    sorted_2 = sort(cycle_length_sequence_2);
+    if isequal(sorted_1, sorted_2) & ( sorted_d1 == sorted_d2) & (N1 == N2) & (E1 == E2)
+        [areIsomorphic] = true;
+    else
+        [areIsomorphic] = false;
+    end
+end
+        
